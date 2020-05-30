@@ -1,0 +1,6 @@
+*.sql
+*.gz
+*.zip
+!spec/*.sql
+!spec/*.gz
+!spec/*.zip

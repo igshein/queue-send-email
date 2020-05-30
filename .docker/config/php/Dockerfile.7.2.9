@@ -1,0 +1,24 @@
+FROM php:7.2.9-fpm
+
+RUN apt-get update && apt-get install -q -y curl wget unzip netcat \
+     libmcrypt-dev libpq-dev libssl-dev libpcre3 libpcre3-dev libpng-dev zlib1g zlib1g-dev \
+     && docker-php-ext-install zip
+
+## Cron installation and setup
+RUN apt-get update && apt-get install -q -y cron rsyslog nano
+ADD config/php/crontab.sh /etc/cron.d/crontab.sh
+RUN chmod 0644 /etc/cron.d/crontab.sh
+RUN crontab /etc/cron.d/crontab.sh
+RUN touch /var/log/crontab.log && chmod 0644 /var/log/crontab.log
+
+## Install GD
+RUN apt-get install -q -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+    && docker-php-ext-install -j$(nproc) iconv \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd
+
+## Install pdo_mysql
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+
+## Install Composer
+RUN cd /bin && curl -sS https://getcomposer.org/installer | php && mv composer.phar composer
