@@ -9,6 +9,6 @@ class MessageSchedule extends Model
     public $timestamps = false;
     protected $table = 'message_schedule';
     protected $fillable = [
-        'message_id', 'dispatch_date', 'timezone'
+        'message_schedule_id', 'message_id', 'request_date', 'timezone', 'dispatch_date'
     ];
 }

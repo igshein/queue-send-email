@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('App\Modules\MessageSchedule\Interfaces\MessageScheduleInterface', 'App\Modules\MessageSchedule\Services\MessageScheduleService');
     }
 
     /**

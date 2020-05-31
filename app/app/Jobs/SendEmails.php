@@ -14,16 +14,16 @@ class SendEmails implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $details;
+    protected $messageScheduleID;
 
-    public function __construct($details)
+    public function __construct($messageScheduleID)
     {
-        $this->details = $details;
+        $this->messageScheduleID = $messageScheduleID;
     }
 
     public function handle()
     {
         $date = Carbon::now()->timezone(env('DB_TIME_ZONE'))->format('Y-m-d H:i:s');
-        Log::info('SEND EMAIL | ' . $this->details . " $date");
+        Log::info('SEND EMAIL | ' . $this->messageScheduleID . " $date");
     }
 }

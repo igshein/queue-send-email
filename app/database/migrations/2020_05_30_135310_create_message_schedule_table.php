@@ -13,9 +13,11 @@ class CreateMessageScheduleTable extends Migration
     public function up()
     {
         Schema::create($this->table, function (Blueprint $table) {
+            $table->bigIncrements('message_schedule_id');
             $table->unsignedBigInteger('message_id');
-            $table->dateTime('dispatch_date');
+            $table->dateTime('request_date');
             $table->string('timezone');
+            $table->dateTime('dispatch_date');
         });
 
         Schema::table($this->table, function (Blueprint $table) {
