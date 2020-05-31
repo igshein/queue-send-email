@@ -3,7 +3,6 @@
 use App\Modules\Customer\Models\Customer;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -11,10 +10,10 @@ class CustomerSeeder extends Seeder
 {
     public function run()
     {
-        $countCustomers = 10;
+        $max = 10;
         $customers = Customer::all();
-        if (count($customers) < $countCustomers) {
-            for ($i=0; $i<$countCustomers; $i++) {
+        if (count($customers) < $max) {
+            for ($i=0; $i<$max; $i++) {
                 Customer::insert([
                     'name' => Str::random(12),
                     'email' => Str::random(24).'@gmail.com',
