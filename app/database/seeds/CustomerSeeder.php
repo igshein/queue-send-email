@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Customer\Models\Customer;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -8,14 +9,13 @@ use Illuminate\Support\Str;
 
 class CustomerSeeder extends Seeder
 {
-    public $table = 'customer';
-
     public function run()
     {
         $countCustomers = 10;
-        if (empty(DB::table($this->table)->where('customer_id', $countCustomers)->first())) {
+        $customers = Customer::all();
+        if (count($customers) < $countCustomers) {
             for ($i=0; $i<$countCustomers; $i++) {
-                DB::table($this->table)->insert([
+                Customer::insert([
                     'name' => Str::random(12),
                     'email' => Str::random(24).'@gmail.com',
                     'password' => Hash::make('password'),
