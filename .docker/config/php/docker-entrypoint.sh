@@ -16,6 +16,7 @@ composer install
 php artisan cache:clear
 php artisan view:clear
 php artisan config:clear
+php artisan queue:listen &
 php artisan migrate --seed --force
 php artisan key:generate
 php artisan config:cache

@@ -4,21 +4,25 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCustomerTable extends Migration
+class
+CreateMessageTable extends Migration
 {
-    protected $table = 'customer';
+    protected $table = 'message';
     protected $primaryKey = false;
     protected $timestamps = false;
 
     public function up()
     {
         Schema::create($this->table, function (Blueprint $table) {
-            $table->bigIncrements('customer_id');
-            $table->string('name');
-            $table->string('email');
-            $table->string('password');
-            $table->string('timezone');
+            $table->bigIncrements('message_id');
+            $table->unsignedBigInteger('customer_id');
+            $table->text('message');
             $table->dateTime('date_create');
+        });
+
+        Schema::table($this->table, function (Blueprint $table) {
+            $table->foreign('customer_id')->references('customer_id')->on('customer')->onDelete('cascade');
+            $table->index('customer_id');
         });
     }
 

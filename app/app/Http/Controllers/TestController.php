@@ -40,7 +40,7 @@ class TestController extends Controller
         $details = 'your_email@gmail.com';
         //dispatch(new SendEmails($details));
         //SendEmails::dispatch($details);
-        SendEmails::dispatch($details)->delay(now()->addSeconds(15));
+        SendEmails::dispatch($details)->delay(now()->addSeconds(2));
 
         return 'Test';
 

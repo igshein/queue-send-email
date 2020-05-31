@@ -12,7 +12,7 @@ class CustomerSeeder extends Seeder
 
     public function run()
     {
-        $countCustomers = 1000;
+        $countCustomers = 10;
         if (empty(DB::table($this->table)->where('customer_id', $countCustomers)->first())) {
             for ($i=0; $i<$countCustomers; $i++) {
                 DB::table($this->table)->insert([
@@ -20,7 +20,7 @@ class CustomerSeeder extends Seeder
                     'email' => Str::random(24).'@gmail.com',
                     'password' => Hash::make('password'),
                     'date_create' => Carbon::now()->timezone(env('DB_TIME_ZONE'))->format('Y-m-d H:i:s'),
-                    'timezone' => env('TIME_ZONE')
+                    'timezone' => env('DB_TIME_ZONE')
                 ]);
             }
         }
