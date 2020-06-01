@@ -14,6 +14,8 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('App\Modules\MessageSchedule\Interfaces\MessageScheduleInterface', 'App\Modules\MessageSchedule\Services\MessageScheduleService');
+        $this->app->bind('App\Modules\Common\Interfaces\CommonInterface', 'App\Modules\Common\Services\CommonService');
+        $this->app->bind('App\Modules\Mail\Interfaces\MailInterface', 'App\Modules\Mail\Services\MailService');
     }
 
     /**

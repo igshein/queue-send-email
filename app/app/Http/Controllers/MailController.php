@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Jobs\SendEmails;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
-
-class TestController extends Controller
+class MailController extends Controller
 {
     public function __construct()
     {
@@ -18,7 +13,8 @@ class TestController extends Controller
     public function sendEmail()
     {
         $messageScheduleID = 2;
-        SendEmails::dispatch($messageScheduleID)->delay(now()->addSeconds(10));
+        $delay = 2;
+        SendEmails::dispatch($messageScheduleID)->delay(now()->addSeconds($delay));
 
         return redirect()->route('home');
     }

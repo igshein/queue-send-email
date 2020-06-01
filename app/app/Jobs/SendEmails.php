@@ -2,13 +2,12 @@
 
 namespace App\Jobs;
 
-use Carbon\Carbon;
+use App\Modules\Mail\Services\MailService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Log;
 
 class SendEmails implements ShouldQueue
 {
@@ -21,9 +20,8 @@ class SendEmails implements ShouldQueue
         $this->messageScheduleID = $messageScheduleID;
     }
 
-    public function handle()
+    public function handle(MailService $mailService)
     {
-        $date = Carbon::now()->timezone(env('DB_TIME_ZONE'))->format('Y-m-d H:i:s');
-        Log::info('SEND EMAIL | ' . $this->messageScheduleID . " $date");
+        $mailService->send($this->messageScheduleID);
     }
 }
