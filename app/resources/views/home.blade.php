@@ -15,6 +15,21 @@
                     @endif
 
                     You are logged in!
+
+
+                    <?php var_dump($arr); ?>
+
+                    <br>
+                    <button>
+                        <a href="{{ route('send-email') }}" onclick="event.preventDefault(); document.getElementById('send-email').submit();">
+                            Сгенерировать отправку 10 emails
+                        </a>
+                        <form id="send-email" action="{{ route('send-email') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </button>
+
+
                 </div>
             </div>
         </div>

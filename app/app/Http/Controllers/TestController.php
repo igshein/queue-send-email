@@ -15,12 +15,11 @@ class TestController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function sendEmail()
     {
-        $messageScheduleID = 'your_email@gmail.com';
+        $messageScheduleID = 2;
         SendEmails::dispatch($messageScheduleID)->delay(now()->addSeconds(10));
 
-        return 'Test';
-
+        return redirect()->route('home');
     }
 }
