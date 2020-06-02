@@ -11,6 +11,7 @@ class CreateLogsSendMessageTable extends Migration
     public function up()
     {
         Schema::create($this->table, function (Blueprint $table) {
+            $table->bigIncrements('logs_send_message_id');
             $table->bigInteger('message_id');
             $table->bigInteger('customer_id');
             $table->text('message');

@@ -13,7 +13,7 @@ class MailController extends Controller
     public function sendEmail()
     {
         $messageScheduleID = 2;
-        $delay = 2;
+        $delay = 1;
         SendEmails::dispatch($messageScheduleID)->delay(now()->addSeconds($delay));
 
         return redirect()->route('home');

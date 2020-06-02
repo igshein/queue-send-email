@@ -30,6 +30,21 @@ class MailService implements MailInterface
         sleep(1); ## API response emulation
     }
 
+    public function getLogSend(int $limit = 1000): array
+    {
+        return LogsSendMessage::select(
+            'logs_send_message_id',
+            'message_id',
+            'customer_id',
+            'message',
+            'date_send'
+        )
+            ->orderBy('logs_send_message_id', 'desc')
+            ->limit($limit)
+            ->get()
+            ->toArray();
+    }
+
     private function selectMessageFileds(int $messageScheduleId): MessageSchedule
     {
         $message = MessageSchedule::select(

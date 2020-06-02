@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Modules\Mail\Interfaces\MailInterface;
+use App\Modules\MessageSchedule\Interfaces\MessageScheduleInterface;
+
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    private $messageSchedule;
+    private $mailService;
+
+    public function __construct(MessageScheduleInterface $messageSchedule, MailInterface $mailService)
     {
         $this->middleware('auth');
+        $this->messageSchedule = $messageSchedule;
+        $this->mailService = $mailService;
     }
 
     /**
@@ -21,8 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $arr = 'Test';
+        $messageSend = $this->mailService->getLogSend(10);
+        $messagesInSchedule = $this->messageSchedule->getAll(10);
 
-        return view('home', compact('arr'));
+        return view('home', compact('messagesInSchedule', 'messageSend'));
     }
 }
