@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Jobs\SendEmails;
 
 use App\Modules\MessageSchedule\Services\MessageScheduleService;
 use Illuminate\Http\Request;
@@ -18,12 +17,12 @@ class MessageController extends Controller
 
     public function sendEmail(Request $request)
     {
-        $customerId = $request->get('customer_id');
-        $message = $request->get('message');
-        $timezone = $request->get('timezone');
-        $requestDate = $this->validDataTime($request->get('request_date'));
+        $requestData['customer_id'] = $request->get('customer_id');
+        $requestData['message'] = $request->get('message');
+        $requestData['timezone'] = $request->get('timezone');
+        $requestData['request_date'] = $this->validDataTime($request->get('request_date'));
 
-        $this->messageSchedule->createMessageSchedule($customerId, $message, $timezone, $requestDate);
+        $this->messageSchedule->sendNewMessage($requestData);
 
         return redirect()->route('home');
     }

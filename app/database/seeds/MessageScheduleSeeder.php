@@ -25,16 +25,14 @@ class MessageScheduleSeeder extends Seeder
         if (count($messageSchedulers) < MessageSeeder::MAX) {
             $messages = Message::all();
             foreach($messages as $message) {
-                $timestamp = $this->commonService->now(rand(10, 60));
+                $dateTime = $this->commonService->now(rand(10, 60));
                 $timezone = $timezoneLists[rand(0, 2)];
                 MessageSchedule::insert([
                     'message_id'     => $message->message_id,
-                    'request_date'   => $timestamp,
+                    'request_date'   => $dateTime,
                     'timezone'       => $timezone,
-                    'dispatch_date'  => $this->messageSchedule->getDispatchDate($timestamp, $timezone),
+                    'dispatch_date'  => $this->messageSchedule->getDispatchDate($dateTime, $timezone),
                 ]);
-
-                // $this->messageSchedule->getDifferenceTimesInSeconds($this->messageSchedule->getDispatchDate($timestamp, $timezone);
             }
         }
     }

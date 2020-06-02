@@ -3,17 +3,52 @@
 namespace App\Modules\MessageSchedule\Services;
 
 use App\Jobs\SendEmails;
+use App\Modules\Common\Factory\CommonServiceFactory;
+use App\Modules\Message\Models\Message;
 use App\Modules\MessageSchedule\Interfaces\MessageScheduleInterface;
 use App\Modules\MessageSchedule\Models\MessageSchedule;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\Object_;
 
 class MessageScheduleService implements MessageScheduleInterface
 {
-    public function getDispatchDate(string $timestamp, string $timezone): string
+    private $commonServiceFactory;
+
+    public function __construct()
     {
-        $date = Carbon::createFromFormat('Y-m-d H:i:s', $timestamp, $timezone);
+        $this->commonServiceFactory = new CommonServiceFactory;
+    }
+
+    public function sendNewMessage(array $requestData): void
+    {
+        try {
+            DB::beginTransaction();
+            $requestData['message_id'] = $this->createMessage($requestData);
+            $messageScheduleId = $this->createMessageSchedule($requestData);
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+
+        $delay = 0;
+        SendEmails::dispatch($messageScheduleId)->delay(now()->addSeconds($delay));
+    }
+
+    public function getDispatchDate(string $dateTime, string $timezone): string
+    {
+        $date = Carbon::createFromFormat('Y-m-d H:i:s', $dateTime, $timezone);
         $date->setTimezone(env('DB_TIME_ZONE'));
-        return $date;
+
+        //dd($date, $this->commonServiceFactory->getCommonService()->now());
+
+
+        if ($date->gt($this->commonServiceFactory->getCommonService()->now())) {
+            return $date;
+        } else {
+            throw new \Exception('Error: request date is less than current date');
+        }
     }
 
     public function getDifferenceTimesInSeconds(string $largeDate): int
@@ -21,13 +56,6 @@ class MessageScheduleService implements MessageScheduleInterface
         $now = Carbon::now(env('DB_TIME_ZONE'));
         $largeDate = Carbon::parse($largeDate, env('DB_TIME_ZONE'));
         return $now->diffInSeconds($largeDate);
-    }
-
-    public function createMessageSchedule(int $customerId, string $message, string $timezone, string $requestDate): void
-    {
-        $messageScheduleID = 2;
-        $delay = 0;
-        SendEmails::dispatch($messageScheduleID)->delay(now()->addSeconds($delay));
     }
 
     public function getAll(int $limit = 1000): array
@@ -44,5 +72,24 @@ class MessageScheduleService implements MessageScheduleInterface
             ->limit($limit)
             ->get()
             ->toArray();
+    }
+
+    private function createMessage(array $requestData): int
+    {
+        return Message::create([
+            'customer_id' => $requestData['customer_id'],
+            'message' => $requestData['message'],
+            'date_create' => $this->commonServiceFactory->getCommonService()->now()
+        ])->id;
+    }
+
+    private function createMessageSchedule(array $requestData): int
+    {
+        return MessageSchedule::create([
+            'message_id' => $requestData['message_id'],
+            'request_date' => $requestData['request_date'],
+            'timezone' => $requestData['timezone'],
+            'dispatch_date' => $this->getDispatchDate($requestData['request_date'], $requestData['timezone']),
+        ])->id;
     }
 }

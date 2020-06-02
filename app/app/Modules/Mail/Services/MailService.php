@@ -6,6 +6,8 @@ use App\Modules\Common\Factory\CommonServiceFactory;
 use App\Modules\Mail\Interfaces\MailInterface;
 use App\Modules\MessageSchedule\Models\LogsSendMessage;
 use App\Modules\MessageSchedule\Models\MessageSchedule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MailService implements MailInterface
 {
@@ -18,16 +20,22 @@ class MailService implements MailInterface
 
     public function send(int $messageScheduleId): void
     {
-        $message = $this->selectMessageFileds($messageScheduleId);
-
-        LogsSendMessage::insert([
-            'message_id' => $message->message_id,
-            'customer_id' => $message->customer_id,
-            'message' => $message->message,
-            'date_send' => $this->commonServiceFactory->getCommonService()->now(),
-        ]);
-
-        sleep(1); ## API response emulation
+        try {
+            DB::beginTransaction();
+            $message = $this->selectMessageFileds($messageScheduleId);
+            sleep(1); ## API response emulation
+            LogsSendMessage::insert([
+                'message_id' => $message->message_id,
+                'customer_id' => $message->customer_id,
+                'message' => $message->message,
+                'date_send' => $this->commonServiceFactory->getCommonService()->now(),
+            ]);
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            Log::error("Error: email for messageScheduleId=$messageScheduleId not send: " . serialize($exception));
+            throw $exception;
+        }
     }
 
     public function getLogSend(int $limit = 1000): array

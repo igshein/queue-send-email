@@ -1,12 +1,19 @@
 <?php
 
+use App\Modules\Common\Interfaces\CommonInterface;
 use App\Modules\Message\Models\Message;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
 
 class MessageSeeder extends Seeder
 {
     public const MAX = 10;
+
+    private $commonService;
+
+    public function __construct(CommonInterface $common)
+    {
+        $this->commonService = $common;
+    }
 
     public function run()
     {
@@ -17,7 +24,7 @@ class MessageSeeder extends Seeder
                 Message::insert([
                     'customer_id' => $randCustomerID,
                     'message'     => "Test message. Customers ID=$randCustomerID. " . time(),
-                    'date_create' => Carbon::now()->timezone(env('DB_TIME_ZONE'))->format('Y-m-d H:i:s')
+                    'date_create' => $this->commonService->now()
                 ]);
             }
         }

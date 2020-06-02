@@ -73,7 +73,7 @@
                             <th>Message</th>
                             <th>Request date</th>
                             <th>Timezone</th>
-                            <th>Dispatch date</th>
+                            <th>Dispatch date (on this server)</th>
                         </tr>
                         @foreach($messagesInSchedule as $message)
                         <tr>
