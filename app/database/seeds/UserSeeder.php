@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
             User::insert([
                 'name' => 'admin',
                 'email' => 'igoshein@gmail.com',
-                'password' => Hash::make('p9pVZkzyr89Htz8awsod7Ka3'),
+                'password' => Hash::make(env('USER_ADMIN_PASSWORD')),
             ]);
         }
     }

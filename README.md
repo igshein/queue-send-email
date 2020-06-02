@@ -50,6 +50,7 @@ git clone ...
 ```bash
 make setup
 ```
+Set in .env file: USER_ADMIN_PASSWORD, CUSTOMER_DEFAULT_PASSWORD, DB_PASSWORD
 
 2/ Create build (Only when first deploy or update Dockerfile)
 ```bash

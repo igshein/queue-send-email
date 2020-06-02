@@ -17,7 +17,7 @@ class CustomerSeeder extends Seeder
                 Customer::insert([
                     'name' => "Customer name $i",
                     'email' => Str::random(24).'@gmail.com',
-                    'password' => Hash::make('password'),
+                    'password' => Hash::make(env('CUSTOMER_DEFAULT_PASSWORD')),
                     'date_create' => Carbon::now()->timezone(env('DB_TIME_ZONE'))->format('Y-m-d H:i:s'),
                     'timezone' => env('DB_TIME_ZONE')
                 ]);
