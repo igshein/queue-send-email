@@ -13,9 +13,9 @@ class CustomerSeeder extends Seeder
         $max = 10;
         $customers = Customer::all();
         if (count($customers) < $max) {
-            for ($i=0; $i<$max; $i++) {
+            for ($i=1; $i<=$max; $i++) {
                 Customer::insert([
-                    'name' => Str::random(12),
+                    'name' => "Customer name $i",
                     'email' => Str::random(24).'@gmail.com',
                     'password' => Hash::make('password'),
                     'date_create' => Carbon::now()->timezone(env('DB_TIME_ZONE'))->format('Y-m-d H:i:s'),

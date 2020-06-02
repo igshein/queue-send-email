@@ -2,6 +2,7 @@
 
 namespace App\Modules\MessageSchedule\Services;
 
+use App\Jobs\SendEmails;
 use App\Modules\MessageSchedule\Interfaces\MessageScheduleInterface;
 use App\Modules\MessageSchedule\Models\MessageSchedule;
 use Carbon\Carbon;
@@ -22,6 +23,13 @@ class MessageScheduleService implements MessageScheduleInterface
         return $now->diffInSeconds($largeDate);
     }
 
+    public function createMessageSchedule(int $customerId, string $message, string $timezone, string $requestDate): void
+    {
+        $messageScheduleID = 2;
+        $delay = 0;
+        SendEmails::dispatch($messageScheduleID)->delay(now()->addSeconds($delay));
+    }
+
     public function getAll(int $limit = 1000): array
     {
         return MessageSchedule::select(
@@ -32,7 +40,7 @@ class MessageScheduleService implements MessageScheduleInterface
             "message_schedule.dispatch_date"
         )
             ->leftJoin('message', 'message.message_id', '=', 'message_schedule.message_id')
-            ->orderBy('message_schedule.dispatch_date', 'asc')
+            ->orderBy('message_schedule.message_schedule_id', 'desc')
             ->limit($limit)
             ->get()
             ->toArray();
