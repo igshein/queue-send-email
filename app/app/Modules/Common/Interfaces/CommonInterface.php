@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Modules\Common\Interfaces;
-
 
 interface CommonInterface
 {
