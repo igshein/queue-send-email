@@ -23,7 +23,7 @@ class MailService implements MailInterface
         try {
             DB::beginTransaction();
             $message = $this->selectMessageFileds($messageScheduleId);
-            sleep(1); ## API response emulation
+            sleep(0.5); ## API response emulation
             LogsSendMessage::insert([
                 'message_id' => $message->message_id,
                 'customer_id' => $message->customer_id,
