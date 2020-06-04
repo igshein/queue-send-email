@@ -21,7 +21,6 @@ class MailService implements MailInterface
     public function send(int $messageScheduleId): void
     {
         try {
-            DB::beginTransaction();
             $message = $this->selectMessageFileds($messageScheduleId);
             sleep(0.5); ## API response emulation
             LogsSendMessage::insert([
@@ -30,9 +29,7 @@ class MailService implements MailInterface
                 'message' => $message->message,
                 'date_send' => $this->commonServiceFactory->getCommonService()->now(),
             ]);
-            DB::commit();
         } catch (\Exception $exception) {
-            DB::rollBack();
             Log::error("Error: email for messageScheduleId=$messageScheduleId not send: " . serialize($exception));
             throw $exception;
         }
