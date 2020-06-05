@@ -42,7 +42,6 @@ services:
     tty: true
 
   mysql:
-    ## image: mysql:5.7
     build:
       context: .docker
       dockerfile: ./config/mysql/Dockerfile
@@ -50,7 +49,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
-      TZ: ${DB_TIME_ZONE}
     ports:
       - ${DB_PORT}:3306
     volumes:

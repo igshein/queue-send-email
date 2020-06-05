@@ -14,11 +14,13 @@ class CreateCustomerTable extends Migration
     {
         Schema::create($this->table, function (Blueprint $table) {
             $table->bigIncrements('customer_id');
-            $table->string('name');
-            $table->string('email');
-            $table->string('password');
-            $table->string('timezone');
-            $table->dateTime('date_create');
+            $table->string('customer_email')->unique();;
+            $table->unsignedInteger('timezone_id');
+        });
+
+        Schema::table($this->table, function (Blueprint $table) {
+            $table->foreign('timezone_id')->references('timezone_id')->on('timezone')->onDelete('cascade');
+            $table->index('timezone_id');
         });
     }
 

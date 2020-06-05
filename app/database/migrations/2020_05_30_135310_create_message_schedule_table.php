@@ -14,15 +14,14 @@ class CreateMessageScheduleTable extends Migration
     {
         Schema::create($this->table, function (Blueprint $table) {
             $table->bigIncrements('message_schedule_id');
-            $table->unsignedBigInteger('message_id');
-            $table->dateTime('request_date');
-            $table->string('timezone');
-            $table->dateTime('dispatch_date');
+            $table->unsignedInteger('message_id');
+            $table->string('message_schedule_time', 5);
         });
 
         Schema::table($this->table, function (Blueprint $table) {
             $table->foreign('message_id')->references('message_id')->on('message')->onDelete('cascade');
             $table->index('message_id');
+            $table->index('message_schedule_time');
         });
     }
 

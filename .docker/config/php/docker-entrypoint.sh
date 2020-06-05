@@ -16,8 +16,10 @@ composer install
 php artisan cache:clear
 php artisan view:clear
 php artisan config:clear
-php artisan queue:listen &
 php artisan migrate --seed --force
 php artisan key:generate
 php artisan config:cache
+##php artisan queue:listen &
+php artisan queue:work --queue=emails &
+##php artisan queue:work --queue=users &
 php-fpm

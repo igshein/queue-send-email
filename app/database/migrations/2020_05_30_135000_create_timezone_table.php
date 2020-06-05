@@ -4,18 +4,17 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class
-CreateMessageTable extends Migration
+class CreateTimezoneTable extends Migration
 {
-    protected $table = 'message';
+    protected $table = 'timezone';
     protected $primaryKey = false;
     protected $timestamps = false;
 
     public function up()
     {
         Schema::create($this->table, function (Blueprint $table) {
-            $table->increments('message_id');
-            $table->text('message_content');
+            $table->increments('timezone_id');
+            $table->string('timezone_name')->unique();
         });
     }
 
