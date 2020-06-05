@@ -21,6 +21,8 @@ class MessageSeeder extends Seeder
 
     public function run()
     {
+//        message_id      int unsigned auto_increment
+//        message_content text not null
         $message = Message::all();
         if (count($message) < self::MAX) {
             for ($i=0; $i<self::MAX; $i++) {

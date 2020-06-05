@@ -108,13 +108,14 @@ docker-compose exec php php artisan cache:clear
 docker-compose exec php php artisan config:cache
 docker-compose exec php php artisan view:clear
 
+# Add new seeder or migration
+docker-compose exec php php artisan make:seeder NameSeeder
+docker-compose exec php php artisan make:migration create_name_table
+docker-compose exec php php artisan make:model Models/NameDir/NameModel
+
 # Migrate + seed
 docker-compose exec php php artisan migrate --seed
 docker-compose exec php php artisan migrate:rollback --step=1
-
-# Add new migration
-docker-compose exec php php artisan make:migration create_name_table
-docker-compose exec php php artisan make:model Models/NameDir/NameModel
 
 # Generate Tests
 docker-compose exec php php vendor/bin/codecept generate:cest api  NameDirectory/NameTestCets

@@ -1,29 +1,27 @@
 <?php
 
-use App\Modules\Customer\Models\Customer;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use App\Modules\Timezone\Models\Timezone;
 
 class TimezoneSeeder extends Seeder
 {
     public function run()
     {
-        $max = 10000;
-        $customers = Customer::all()->toArray();
-        if (count($customers) < $max) {
-            for ($i = 1; $i <= $max; $i++) {
-                $customers[] = [
-                    'customer_email' => "test$i@gmail.com",
-                    'customer_timezone' => 'Europe/Kiev',
-                ];
-            }
-            foreach (array_chunk($customers, ($max / 10)) as $customer) {
-                Customer::insert($customer);
-            }
+        $timezones = Timezone::count();
+        if (empty($timezones)) {
+            $timezones = [
+                ['timezone_name' => 'Europe/London'],
+                ['timezone_name' => 'Europe/Berlin'],
+                ['timezone_name' => 'Europe/Kiev'],
+                ['timezone_name' => 'Asia/Dubai'],
+                ['timezone_name' => 'Asia/Singapore'],
+                ['timezone_name' => 'America/New_York'],
+                ['timezone_name' => 'America/Toronto'],
+                ['timezone_name' => 'America/Chicago'],
+                ['timezone_name' => 'America/Los_Angeles'],
+                ['timezone_name' => 'Asia/Tokyo']
+            ];
+            Timezone::insert($timezones);
         }
-        unset($customers);
-        unset($customer);
     }
 }
