@@ -15,15 +15,14 @@ class MessageScheduleSeeder extends Seeder
     {
         $countMessageSchedule = MessageSchedule::count();
         if (empty($countMessageSchedule)) {
-            $messages = Message::all();
-            $countMessages = count($messages);
-            foreach ($messages as $message) {
+            $countMessages = Message::count();
+            for ($i=1; $i<=$countMessages; $i++) {
                 $messagesSchedule[] = [
-                    'message_id'            => mt_rand(1, ($countMessages/10)),
+                    'message_id'            => mt_rand(1, $countMessages),
                     'message_schedule_time' => date("H:i", mt_rand(1250000000, 1259999999))
                 ];
             }
-            foreach (array_chunk($messagesSchedule, (count($messages)/10)) as $messageSchedule) {
+            foreach (array_chunk($messagesSchedule, ($countMessages/10)) as $messageSchedule) {
                 MessageSchedule::insert($messageSchedule);
             }
         }

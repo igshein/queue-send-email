@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 
 class CustomerSeeder extends Seeder
 {
-    public const MAX = 10000;
+    public const MAX = 1000000;
 
     public function run()
     {
@@ -19,7 +19,7 @@ class CustomerSeeder extends Seeder
                         'timezone_id' => rand(1, $countTimezones),
                     ];
             }
-            foreach (array_chunk($customers, (self::MAX/10)) as $customer) {
+            foreach (array_chunk($customers, (self::MAX/1000)) as $customer) {
                 Customer::insert($customer);
             }
         }
