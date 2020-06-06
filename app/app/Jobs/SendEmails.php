@@ -23,7 +23,6 @@ class SendEmails implements ShouldQueue
 
     public function handle(MailService $mailService)
     {
-        Log::error("send-email");
-        //$mailService->send($this->messageScheduleID);
+        $mailService->send($this->messageScheduleID);
     }
 }

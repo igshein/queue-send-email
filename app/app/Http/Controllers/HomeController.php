@@ -7,6 +7,9 @@ use App\Modules\Common\Services\CommonService;
 use App\Modules\Customer\Models\Customer;
 use App\Modules\Mail\Interfaces\MailInterface;
 use App\Modules\MessageSchedule\Interfaces\MessageScheduleInterface;
+use App\Modules\MessageSchedule\Models\MessageSchedule;
+use App\Modules\Timezone\Models\Timezone;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
@@ -30,44 +33,38 @@ class HomeController extends Controller
      */
     public function index()
     {
-//        for ($i=0; $i<30; $i++) {
-//            Log::channel('email')->info("$i TEST MESSAGE $i");
-//        }
-        //Log::channel('email')->info('TEST MESSAGE');
+        $current_timeStamp = (now())->format('Y-m-d H:i');
+        $current_timezone = env('DB_TIME_ZONE');
 
-        $path = storage_path().'/logs/email.log';
-        $data = shell_exec("tail -15 $path");
-        dd($data);
+        ## 1. Создание очередей на создение очередей отправки писем
+        ## string $current_timeStamp
+        ## string $current_timezone
+        $timezones = Timezone::all()->toArray();
+        $current_date = Carbon::createFromFormat('Y-m-d H:i', $current_timeStamp, $current_timezone);
+        foreach ($timezones as $timezone) {
+            $convert_time = $current_date->setTimezone($timezone['timezone_name'])->format('H:i');
+            $messages = MessageSchedule::select('message.message_content')->where('message_schedule_time', $convert_time)->leftJoin('message', 'message_schedule.message_id', '=', 'message.message_id')->get()->toArray();
 
-//        $handle = @fopen(storage_path().'/logs/email.log', "r");
-//        $data = fread($handle, 4096);
-//        echo '<pre>' . $data .  '</pre>';
+            ## 2. Создание очереди для отправки писем
+            ## int   $timezone['timezone_id']
+            ## array $messages
+            $customers = Customer::select('customer_email')->where('timezone_id', $timezone['timezone_id'])->get()->toArray();
+            foreach ($customers as $customer) {
+                foreach ($messages as $message) {
+                    Log::channel('email')->info('email=' . $customer['customer_email'] . ' | ' . 'message=' . $message['message_content']);
+                }
+            }
+        }
 
-
-
-
-//        $fl = fopen(storage_path().'/logs/email.log', "r");
-//        for($x_pos = 5, $ln = 0, $output = array(); fseek($fl, $x_pos, SEEK_END) !== -1; $x_pos--) {
-//            $char = fgetc($fl);
-//            if ($char === "\n") {
-//                // analyse completed line $output[$ln] if need be
-//                $ln++;
-//                continue;
-//            }
-//            $output[$ln] = $char . ((array_key_exists($ln, $output)) ? $output[$ln] : '');
-//        }
-//        fclose($fl);
-//        dd($output);
-
-        exit;
+//        $customers = Customer::where('timezone_id', 8)->get()->toArray();
+//        var_dump(count($customers));
 
 
-
-//        SendEmails::dispatch(1)->delay(now()->addSeconds(10))->onQueue('emails');
-//        SendEmails::dispatch(1)->delay(now()->addSeconds(10))->onQueue('emails');
+//        $time_start = microtime(true);
 //
-//        SendEmails::dispatch(1)->delay(now()->addSeconds(10))->onQueue('users');
-//        SendEmails::dispatch(1)->delay(now()->addSeconds(10))->onQueue('users');
+//        $time_end = microtime(true);
+//        $execution_time = ($time_end - $time_start);
+//        echo '<b>Total Execution Time:</b> '.$execution_time.' sec';
 
         exit('exit');
 

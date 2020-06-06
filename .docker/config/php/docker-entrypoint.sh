@@ -20,6 +20,6 @@ php artisan migrate --seed --force
 php artisan key:generate
 php artisan config:cache
 ##php artisan queue:listen &
-php artisan queue:work --queue=emails &
-##php artisan queue:work --queue=users &
+php artisan queue:work --queue=create-email-queue &
+php artisan queue:work --queue=sende-mails &
 php-fpm

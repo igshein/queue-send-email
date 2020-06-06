@@ -5,18 +5,19 @@ use App\Modules\Message\Models\Message;
 
 class MessageSeeder extends Seeder
 {
-    public const MAX = 10000;
-
     public function run()
     {
+        $max = env('MAX_MESSAGE_SEED');
+
         $countMessages = Message::count();
-        if ($countMessages < self::MAX) {
-            for ($i=1; $i<=self::MAX; $i++) {
+        if ($countMessages < $max) {
+            $messages = [];
+            for ($i=1; $i<=$max; $i++) {
                 $messages[] = [
                     'message_content' => "Test message $i",
                 ];
             }
-            foreach (array_chunk($messages, (self::MAX/10)) as $message) {
+            foreach (array_chunk($messages, ($max/10)) as $message) {
                 Message::insert($message);
             }
         }

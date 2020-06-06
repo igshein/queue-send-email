@@ -6,20 +6,20 @@ use Illuminate\Database\Seeder;
 
 class CustomerSeeder extends Seeder
 {
-    public const MAX = 1000000;
-
     public function run()
     {
+        $max = env('MAX_CUSTOMER_SEED');
+
         $countCustomers = Customer::count();
-        if ($countCustomers < self::MAX) {
+        if ($countCustomers < $max) {
             $countTimezones = Timezone::count();
-            for ($i=1; $i<=self::MAX; $i++) {
+            for ($i=1; $i<=$max; $i++) {
                 $customers[] = [
                         'customer_email' => "test$i@gmail.com",
                         'timezone_id' => rand(1, $countTimezones),
                     ];
             }
-            foreach (array_chunk($customers, (self::MAX/1000)) as $customer) {
+            foreach (array_chunk($customers, ($max/1000)) as $customer) {
                 Customer::insert($customer);
             }
         }
