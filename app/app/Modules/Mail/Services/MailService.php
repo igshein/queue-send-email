@@ -2,6 +2,7 @@
 
 namespace App\Modules\Mail\Services;
 
+use App\Jobs\SendEmails;
 use App\Modules\Common\Factory\CommonServiceFactory;
 use App\Modules\Mail\Interfaces\MailInterface;
 use Illuminate\Support\Facades\Log;
@@ -15,9 +16,17 @@ class MailService implements MailInterface
         $this->commonServiceFactory = new CommonServiceFactory;
     }
 
-    public function send(int $messageScheduleId): void
+    public function createWorkSendEmail(string $email, string $content): void
     {
-        Log::channel('email')->info('send-email');
+        //$delay = 0; ## For debug
+        $data['email'] = $email;
+        $data['content'] = $content;
+        SendEmails::dispatch($data)/*->delay(now()->addSeconds($delay))*/->onQueue('send-mails');
+    }
+
+    public function send(string $email, string $content): void
+    {
+        Log::channel('email')->info('send-email | '. date('Y-m-d H:i:s') . ' | email=' . $email . ' | message=' . $content);
 //        try {
 //            $message = $this->selectMessageFileds($messageScheduleId);
 //            sleep(0.5); ## API response emulation

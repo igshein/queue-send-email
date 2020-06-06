@@ -2,27 +2,28 @@
 
 namespace App\Jobs;
 
-use App\Modules\Mail\Services\MailService;
+use App\Modules\Mail\Interfaces\MailInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Log;
 
 class SendEmails implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $messageScheduleID;
+    protected $data;
+    //protected $mailService;
 
-    public function __construct($messageScheduleID)
+    public function __construct($data)
     {
-        $this->messageScheduleID = $messageScheduleID;
+        $this->data = $data;
+        //$this->mailService = $mailService;
     }
 
-    public function handle(MailService $mailService)
+    public function handle(MailInterface $mailService)
     {
-        $mailService->send($this->messageScheduleID);
+        $mailService->send($this->data['email'], $this->data['content']);
     }
 }

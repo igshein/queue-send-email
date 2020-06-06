@@ -21,5 +21,5 @@ php artisan key:generate
 php artisan config:cache
 ##php artisan queue:listen &
 php artisan queue:work --queue=create-email-queue &
-php artisan queue:work --queue=sende-mails &
+php artisan queue:work --queue=send-mails &
 php-fpm

@@ -36,6 +36,10 @@ class HomeController extends Controller
         $current_timeStamp = (now())->format('Y-m-d H:i');
         $current_timezone = env('DB_TIME_ZONE');
 
+
+        $time_start = microtime(true);
+
+
         ## 1. Создание очередей на создение очередей отправки писем
         ## string $current_timeStamp
         ## string $current_timezone
@@ -44,7 +48,11 @@ class HomeController extends Controller
         foreach ($timezones as $timezone) {
             $convert_time = $current_date->setTimezone($timezone['timezone_name'])->format('H:i');
             $messages = MessageSchedule::select('message.message_content')->where('message_schedule_time', $convert_time)->leftJoin('message', 'message_schedule.message_id', '=', 'message.message_id')->get()->toArray();
+            if (sizeof($messages)) {
+                $this->messageSchedule->createEmailQueue($timezone['timezone_id'], $messages);
+            }
 
+            /**
             ## 2. Создание очереди для отправки писем
             ## int   $timezone['timezone_id']
             ## array $messages
@@ -54,19 +62,17 @@ class HomeController extends Controller
                     Log::channel('email')->info('email=' . $customer['customer_email'] . ' | ' . 'message=' . $message['message_content']);
                 }
             }
+            */
         }
 
 //        $customers = Customer::where('timezone_id', 8)->get()->toArray();
 //        var_dump(count($customers));
 
+        $time_end = microtime(true);
+        $execution_time = ($time_end - $time_start);
+        echo '<b>Time:</b> ' . $execution_time;
 
-//        $time_start = microtime(true);
-//
-//        $time_end = microtime(true);
-//        $execution_time = ($time_end - $time_start);
-//        echo '<b>Total Execution Time:</b> '.$execution_time.' sec';
-
-        exit('exit');
+        exit(' sec');
 
 
         $customers = Customer::select()->limit(10)->get();

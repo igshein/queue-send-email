@@ -117,6 +117,10 @@ docker-compose exec php php artisan make:model Models/NameDir/NameModel
 docker-compose exec php php artisan migrate --seed
 docker-compose exec php php artisan migrate:rollback --step=1
 
+# Jobs
+## for database ## docker-compose exec php php artisan queue:table
+docker-compose exec php php artisan make:job Email
+
 # Generate Tests
 docker-compose exec php php vendor/bin/codecept generate:cest api  NameDirectory/NameTestCets
 docker-compose exec php php vendor/bin/codecept generate:test unit NameDirectory/NameTestTest

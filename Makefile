@@ -34,6 +34,10 @@ clear:
 	rm -rf .docker/log/php/error.log && \
 	rm -ff app/.env
 
+clear-data:
+	sudo rm /home/debian/Desktop/Projects/laravel-queue/app/storage/logs/*.log && \
+	sudo rm -R /home/debian/Desktop/Projects/laravel-queue/.docker/data
+
 clear-cache:
 	docker-compose exec php php artisan cache:clear && \
 	docker-compose exec php php artisan config:cache && \
