@@ -15,12 +15,10 @@ class CreateEmailQueue implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $data;
-    //protected $mailService;
 
     public function __construct($data)
     {
         $this->data = $data;
-        //$this->mailService = $mailService;
     }
 
     public function handle(MailInterface $mailService)
@@ -28,7 +26,6 @@ class CreateEmailQueue implements ShouldQueue
         $customers = Customer::select('customer_email')->where('timezone_id', $this->data['timezone_id'])->get()->toArray();
         foreach ($customers as $customer) {
             foreach ($this->data['messages'] as $message) {
-                // Log::channel('email')->info('email=' . $customer['customer_email'] . ' | ' . 'message=' . $message['message_content']);
                 $mailService->createWorkSendEmail($customer['customer_email'], $message['message_content']);
             }
         }

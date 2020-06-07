@@ -14,80 +14,66 @@
                         </div>
                     @endif
 
-                    <h5>Тестирование отправки сообщения</h5>
-                    <form id="send-email" action="{{ route('send-email') }}" method="POST">
-                        <p>
-                            <select name="customer_id">
-                                @foreach($customers as $customer)
-                                <option value="{{$customer->customer_id}}">{{ $customer->name }}</option>
-                                @endforeach
-                            </select> Select customer
-                        </p>
-                        <p>
-                            <input name="message" type="text" value="Test message <?=time() ?>">
-                        </p>
-                        <p>
-                            <select name="timezone">
-                                <option>Europe/Kiev</option>
-                                <option>Europe/London</option>
-                                <option>Europe/Amsterdam</option>
-                                <option>Europe/Minsk</option>
-                                <option>Asia/Tokyo</option>
-                            </select> Select Timezone
-                        </p>
-                        <p>
-                            <input name="request_date" type="text" value="{{ $dateTime }}"> Set DataTime
-                        </p>
+                    <h5>Testing</h5>
+                    <form id="send-email" action="{{ route('create-mail-queue') }}" method="POST">
                         @csrf
                         <p>
-                            <input type="submit" value="Отправить">
+                            <input type="submit" value="Run command: php artisan create:mail-queue">
                         </p>
                     </form><br>
 
-                    <hr>
-                    <h5>Последние 10 отправленных сообщений <a href="{{ route('home') }}"><button>Обновить</button></a><br></h5>
+                    <h5>Beanstalkd statistic<br></h5>
                     <table border="2" cellpadding="4">
                         <tr>
-                            <th>ID</th>
-                            <th>message_id</th>
-                            <th>customer_id</th>
-                            <th>message</th>
-                            <th>date_send</th>
+                            <th>Job</th>
+                            <th>Count</th>
                         </tr>
-                        @foreach($messageSend as $message)
                         <tr>
-                            <td>{{ $message['logs_send_message_id'] }}</td>
-                            <td>{{ $message['message_id'] }}</td>
-                            <td>{{ $message['customer_id'] }}</td>
-                            <td>{{ $message['message'] }}</td>
-                            <td>{{ $message['date_send'] }}</td>
+                            <td>Current jobs urgent</td>
+                            <td>{{ $pheanstalkStatus['current-jobs-urgent'] }}</td>
                         </tr>
-                        @endforeach
+                        <tr>
+                            <td>current-jobs-ready</td>
+                            <td>{{ $pheanstalkStatus['current-jobs-ready'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>current-jobs-reserved</td>
+                            <td>{{ $pheanstalkStatus['current-jobs-reserved'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>current-jobs-delayed</td>
+                            <td>{{ $pheanstalkStatus['current-jobs-delayed'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>current-jobs-buried</td>
+                            <td>{{ $pheanstalkStatus['current-jobs-buried'] }}</td>
+                        </tr>
                     </table><br>
-
-                    <hr>
-                    <h5>Расписание отправки для 10 последних сообщений</h5>
-                    <table border="2" cellpadding="4">
-                        <tr>
-                            <th>ID</th>
-                            <th>Message</th>
-                            <th>Request date</th>
-                            <th>Timezone</th>
-                            <th>Dispatch date (on this server)</th>
-                        </tr>
-                        @foreach($messagesInSchedule as $message)
-                        <tr>
-                            <td>{{ $message['message_schedule_id'] }}</td>
-                            <td>{{ $message['message'] }}</td>
-                            <td>{{ $message['request_date'] }}</td>
-                            <td>{{ $message['timezone'] }}</td>
-                            <td>{{ $message['dispatch_date'] }}</td>
-                        </tr>
-                        @endforeach
-                    </table>
+                    <a href="{{ route('home') }}"><button>Stop autoreload</button></a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    // function getQueryVariable(variable) {
+    //     var query = window.location.search.substring(1);
+    //     var vars = query.split("&");
+    //     for (var i = 0; i < vars.length; i++) {
+    //         var pair = vars[i].split("=");
+    //         if (pair[0] == variable) {
+    //             return pair[1];
+    //         }
+    //     }
+    //     //console.log('Query Variable ' + variable + ' not found');
+    // }
+    //
+    // var param1var = getQueryVariable("autoReload");
+    //
+    // if (param1var) {
+    //     setTimeout(function(){
+    //         location = '/home?autoReload=1'
+    //     },1000)
+    // }
+</script>
 @endsection

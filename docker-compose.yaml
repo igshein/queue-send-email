@@ -34,7 +34,7 @@ services:
     entrypoint: ['sh', '/root/docker-entrypoint.sh']
     depends_on:
       - mysql
-      - redis
+      - beanstalkd
     ports:
         - ${PHP_PORT_DOCKER}:9000
     env_file:
@@ -45,7 +45,6 @@ services:
     build:
       context: .docker
       dockerfile: ./config/mysql/Dockerfile
-    hostname: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -58,24 +57,18 @@ services:
       - .env
     tty: true
 
-  phpmyadmin:
-    depends_on:
-      - mysql
-    image: phpmyadmin/phpmyadmin
+  beanstalkd:
+    image: schickling/beanstalkd:latest
+    restart: always
     ports:
-      - ${PHPMYADMIN_PORT}:80
-    environment:
-      PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      - ${BEANSTALKD_PORT}:11300
 
-  redis:
-    image: redis:${REDIS_VERSION}
-    ports:
-      - ${REDIS_PORT}:6379
-    command: ["redis-server", "--appendonly", "yes"]
-    volumes:
-      - ./.docker/log/redis:/var/log/redis
-      - ./.docker/data/redis:/data
-    env_file:
-      - .env
-    tty: true
+#  phpmyadmin:
+#    depends_on:
+#      - mysql
+#    image: phpmyadmin/phpmyadmin
+#    ports:
+#      - ${PHPMYADMIN_PORT}:80
+#    environment:
+#      PMA_HOST: mysql
+#      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
