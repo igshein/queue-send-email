@@ -25,17 +25,6 @@ class MailService implements MailInterface
 
     public function send(string $email, string $content): void
     {
-        Log::channel('email')->info('send-email | '. date('Y-m-d H:i:s') . ' | email=' . $email . ' | message=' . $content);
-    }
-
-    public function getLogSend(int $limit = 1000): array
-    {
-        $arr = [];
-        $path = storage_path().'/logs/email.log';
-        $data = shell_exec("tail -15 $path");
-        if(!empty($data)) {
-            $arr = explode(PHP_EOL, $data);
-        }
-        return $arr;
+        Log::channel('email')->info('email=' . $email . ' | message=' . $content);
     }
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Modules\MessageSchedule\Interfaces\MessageScheduleInterface;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Redirect;
-use Pheanstalk\Pheanstalk;
 
 class MessageController extends Controller
 {
@@ -22,7 +21,7 @@ class MessageController extends Controller
         Artisan::call("create:mail-queue");
 
         ## return redirect()->route('home');
-        header("Location: /home?autoReload=1");
+        header("Location: /home");
         exit;
     }
 }

@@ -22,7 +22,7 @@
                         </p>
                     </form><br>
 
-                    <h5>Beanstalkd statistic<br></h5>
+                    <h5>Beanstalkd statistic <a href="{{ route('home') }}"><button>Update</button></a></h5>
                     <table border="2" cellpadding="4">
                         <tr>
                             <th>Job</th>
@@ -49,31 +49,18 @@
                             <td>{{ $pheanstalkStatus['current-jobs-buried'] }}</td>
                         </tr>
                     </table><br>
-                    <a href="{{ route('home') }}"><button>Stop autoreload</button></a>
+
+                    <h5>Log: last 10 emails sent<br></h5>
+                    <table border="2" cellpadding="4">
+                        @foreach($sendEmails as $sendEmail)
+                        <tr>
+                            <td>{{ $sendEmail }}</td>
+                        </tr>
+                        @endforeach
+                    </table><br>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    // function getQueryVariable(variable) {
-    //     var query = window.location.search.substring(1);
-    //     var vars = query.split("&");
-    //     for (var i = 0; i < vars.length; i++) {
-    //         var pair = vars[i].split("=");
-    //         if (pair[0] == variable) {
-    //             return pair[1];
-    //         }
-    //     }
-    //     //console.log('Query Variable ' + variable + ' not found');
-    // }
-    //
-    // var param1var = getQueryVariable("autoReload");
-    //
-    // if (param1var) {
-    //     setTimeout(function(){
-    //         location = '/home?autoReload=1'
-    //     },1000)
-    // }
-</script>
 @endsection

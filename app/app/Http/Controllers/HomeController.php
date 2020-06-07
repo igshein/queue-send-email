@@ -29,6 +29,22 @@ class HomeController extends Controller
     public function index()
     {
         $pheanstalkStatus = (Pheanstalk::create('beanstalkd'))->stats();
-        return view('home', compact('pheanstalkStatus'));
+        $sendEmails = $this->getLogsSendEmails();
+        return view('home', compact('pheanstalkStatus', 'sendEmails'));
+    }
+
+    private function getLogsSendEmails(int $lastRowCount = 10): array
+    {
+        $path = storage_path().'/logs/email.log';
+        $tail = shell_exec("tail -n $lastRowCount $path");
+        $rows = explode(PHP_EOL, $tail);
+        $sendEmails = [];
+        foreach ($rows as $row)
+        {
+            if ($row !== '') {
+                $sendEmails[] = str_replace("local ## production develop local.INFO:", '', $row);
+            }
+        }
+        return $sendEmails;
     }
 }
