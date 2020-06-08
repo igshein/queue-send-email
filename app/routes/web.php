@@ -18,6 +18,5 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 
 Route::get('/home', 'HomeController@index', ['messageSchedule' => 'Taylor'])->name('home');
-
-Route::get('test', 'TestController@index')->name('test')->middleware('auth');
+Route::get('/getStatistic', 'HomeController@getStatistic')->name('table-statistic');
 Route::post('/createEMilQueue', 'MessageController@createMailQueue')->name('create-mail-queue')->middleware('auth');

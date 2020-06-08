@@ -33,6 +33,12 @@ class HomeController extends Controller
         return view('home', compact('pheanstalkStatus', 'sendEmails'));
     }
 
+    public function getStatistic()
+    {
+        $pheanstalkStatus = (Pheanstalk::create('beanstalkd'))->stats();
+        return view('table-statistic', compact('pheanstalkStatus'));
+    }
+
     private function getLogsSendEmails(int $lastRowCount = 10): array
     {
         $path = storage_path().'/logs/email.log';
