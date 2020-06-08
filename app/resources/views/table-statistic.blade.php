@@ -1,3 +1,7 @@
+<h5>
+    Queue statistic
+    <!-- <a href="{{ route('home') }}"><button>Update</button></a> -->
+</h5>
 <table border="2" cellpadding="4">
     <tr>
         <th>Job</th>
@@ -23,4 +27,14 @@
         <td>current-jobs-buried</td>
         <td>{{ $pheanstalkStatus['current-jobs-buried'] }}</td>
     </tr>
+</table>
+<br>
+
+<h5>Log: last 10 emails sent<br></h5>
+<table border="2" cellpadding="4">
+    @foreach($sendEmails as $sendEmail)
+    <tr>
+        <td>{{ $sendEmail }}</td>
+    </tr>
+    @endforeach
 </table>

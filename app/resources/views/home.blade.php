@@ -20,13 +20,14 @@
                         <p>
                             <input type="submit" value="Run command: php artisan create:mail-queue">
                         </p>
-                    </form><br>
+                    </form>
+                    <br>
 
-                    <h5>
-                        Queue statistic
-                        <!-- <a href="{{ route('home') }}"><button>Update</button></a> -->
-                    </h5>
                     <div id="tablestatistic">
+                        <h5>
+                            Queue statistic
+                            <!-- <a href="{{ route('home') }}"><button>Update</button></a> -->
+                        </h5>
                         <table border="2" cellpadding="4">
                             <tr>
                                 <th>Job</th>
@@ -53,6 +54,16 @@
                                 <td>{{ $pheanstalkStatus['current-jobs-buried'] }}</td>
                             </tr>
                         </table>
+                        <br>
+
+                        <h5>Log: last 10 emails sent<br></h5>
+                        <table border="2" cellpadding="4">
+                            @foreach($sendEmails as $sendEmail)
+                            <tr>
+                                <td>{{ $sendEmail }}</td>
+                            </tr>
+                            @endforeach
+                        </table>
                     </div>
                     <script type="text/javascript">
                         function ajaxGetStatistic() {
@@ -78,17 +89,6 @@
 
                         start(0);
                     </script>
-                    <br>
-
-                    <h5>Log: last 10 emails sent<br></h5>
-                    <table border="2" cellpadding="4">
-                        @foreach($sendEmails as $sendEmail)
-                        <tr>
-                            <td>{{ $sendEmail }}</td>
-                        </tr>
-                        @endforeach
-                    </table>
-                    <br>
                 </div>
             </div>
         </div>
